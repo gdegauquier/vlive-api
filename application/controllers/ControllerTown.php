@@ -13,11 +13,18 @@ class ControllerTown extends CI_Controller {
     {
         $data = $this->ModelStation->getDistinctTowns();
 
+		$towns = array();
+		
         if ($data->num_rows() > 0) {
             foreach ($data->result() as $row) {
-                $result[] = array("town_name" => $row->town);
+				
+				$town = new Town();
+				$town->setName( $row->name );
+				
+				array_push($towns,$town);
+                
             }
-            echo json_encode($result);
+            echo json_encode($towns);
         } else {
             header("HTTP/1.0 204 No Content");
             echo json_encode("204: no products in the database");

@@ -10,7 +10,7 @@ class ModelStation extends CI_Model {
 
 	 function getDistinctTowns(  ){
 		 
-		$sql = " SELECT distinct town FROM station ";
+		$sql = " SELECT distinct town as name FROM station order by town ";
 		$query = $this->db->query($sql);
 		
         return $query;
