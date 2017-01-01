@@ -4,6 +4,8 @@
 class Town
 {
     public $name;
+	public $id;
+	public $count;
 	
 	
 	public function setName($name){
@@ -13,6 +15,15 @@ class Town
     public function getName()
     {
         return $this->name;
+    }
+	
+	public function setCount($count){
+		$this->count = $count;
+    }
+
+    public function getCount()
+    {
+        return $this->count;
     }
     
 }
