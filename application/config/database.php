@@ -78,10 +78,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'vlive',
+	'hostname' => 'sql.free.fr',
+	'username' => 'dugauguez',
+	'password' => 'FlatronWide01',
+	'database' => 'dugauguez',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

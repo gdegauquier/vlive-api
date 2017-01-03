@@ -50,8 +50,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'welcome';
-$route["api/v1/towns"]["get"] = "controllertown";
-$route["api/v1/towns/(:any)/stations"]["get"] = "controllerstation/index/$1";
+$route["api/v1/towns"] = "controllerTown";
+$route["api/v1/towns/(:any)/stations"] = "controllerStation/index/$1";
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
