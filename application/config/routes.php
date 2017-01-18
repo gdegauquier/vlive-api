@@ -49,9 +49,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'ControllerVliveIndex';
+$route['stations/(:num)'] = 'ControllerVliveStations/index/$1';
+
 $route["api/v1/towns"] = "controllerTown";
 $route["api/v1/towns/(:any)/stations"] = "controllerStation/index/$1";
+
+$route["api/v1/refresh"] = "controllerRefresh";
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
