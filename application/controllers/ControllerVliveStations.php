@@ -26,4 +26,6 @@ class ControllerVliveStations extends CI_Controller {
 		$data['view'] = 'vlive_stations';
 		$this->load->view('templates/vlive_template', $data);
 	}
+
+
 }

@@ -27,6 +27,18 @@ class ModelStation extends CI_Model {
 
 	}
 
+	function getStations() {
+
+		$sql = " SELECT s.*, t.name as town_name
+				 FROM station s inner join town t on s.town_id =t.id
+				 order by s.name";
+		$query = $this -> db -> query($sql);
+
+		return $query;
+
+	}
+
+
 	function getTownById($townId) {
 
 		$sql = " SELECT town as name , town_id as id
@@ -37,5 +49,110 @@ class ModelStation extends CI_Model {
 		return $query;
 
 	}
+	
+	
+	function getTownByName($townName) {
+		$sql = " SELECT name as name , id as id
+				 FROM  town 
+				 where name = ? LIMIT 1 ";
+		$query = $this -> db -> query($sql, array($townName));
+
+		return $query;
+	}
+	
+	
+	/**
+	* insert town into DB
+	* @name name of the town
+	*/
+	function insertIfNotExistsTown( $name ){
+
+		//id exists ?
+		$id = null;
+		$query = $this->getTownByName( $name );
+		
+		//returns existing id
+		if ( $query != null && $query->num_rows() > 0){
+			$id = $query->result()[0]->id ;
+			return $id;
+		}else{
+
+			echo 'ville non trouvée';
+		}
+		
+		//not exists ? insert town into db ...
+		$sql = "insert into town ( name ) values ( ? )";
+		$this->db->query($sql, array($name));
+		
+		//... and get created id 
+		$query = $this->getTownByName( $name );
+		if ( $query != null && $query->num_rows() > 0){
+			$id = $query->result()[0]->id ;
+			
+		}
+		
+		return $id;
+
+	}
+
+	function getStationById( $id ){
+
+		$sql = " select * from station where id = ? ";
+		return $this->db->query($sql, array($id));
+
+	}
+
+
+	/** 
+	* insert station into DB
+	* @stationDTO
+	*/
+	function updateStation( $stationDTO ){
+
+
+		// town OK ?
+		$idTown = $this->insertIfNotExistsTown( $stationDTO->town_name );
+
+		if ( $idTown == null){
+			return ;
+		}
+
+		//station OK ?
+		// does the station exist ?
+		$query = $this->getStationById( $stationDTO->id );
+
+		// update infos
+		if ( $query != null && $query->num_rows() > 0){
+
+			$sql = "update station set name = ?, address = ?, town_id = ?, bikes = ?, attachs = ?, pay = ? where id = ?";
+			$this->db->query($sql, array( $stationDTO->name,  
+										  $stationDTO->address, 
+										  $idTown, 
+										  $stationDTO->bikes, 
+										  $stationDTO->attachs, 
+										  $stationDTO->pay, 
+										  $stationDTO->id ));
+
+
+			return ;
+		}
+
+
+
+		//insert infos
+
+		$sql = "insert into station (  id, name, address, town_id, bikes, attachs, pay  ) 
+				values ( ?,?,?,?,?,?,? ) ";
+			$this->db->query($sql, array( $stationDTO->id,  
+										  $stationDTO->name, 
+										  $stationDTO->address, 
+										  $idTown,
+										  $stationDTO->bikes, 
+										  $stationDTO->attachs, 
+										  $stationDTO->pay ));
+
+	}
+
+
 
 }

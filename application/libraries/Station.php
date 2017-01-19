@@ -3,11 +3,13 @@
 
 class Station
 {
+	
     public $id;
 	public $name;
 	public $address;
 	public $town_name;
-	public $town_id;
+	public $bikes;
+	public $attachs;
+	public $pay;
 	
-    
 }
