@@ -26,10 +26,9 @@ class ModelStation extends CI_Model {
 
 		$sql = " select TIMESTAMPDIFF(MINUTE,max(date_update),CURRENT_TIMESTAMP) > 10 as toUpdate from station ";
 		$query = $this -> db -> query($sql);
-
 		$ret = false ;
 
-		if ( $query != null && $query-> num_rows() > 0 && $query[0]["toUpdate"] == 1 ){
+		if ( $query != null && $query-> num_rows() > 0 && $query->result()[0]->toUpdate == 1 ){
 			$ret = true ;
 		}
 

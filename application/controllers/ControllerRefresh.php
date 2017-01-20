@@ -12,6 +12,22 @@ class ControllerRefresh extends CI_Controller {
     public function index(  )
     {
 		
+    	$hasToUpdate =  $this->ModelStation->stationsHaveToBeUpdated();
+
+    	if ( $hasToUpdate ){
+    		$this->updateDB();
+    	}
+
+
+//MAJ en BDD OK
+
+$data['stations'] = $this->ModelStation->getStations();
+$this->load->view( 'vlive_stations', $data );
+
+    }
+
+    private function updateDB(){
+
 
 // call page with all the information...
 $html = new simple_html_dom();
@@ -91,11 +107,6 @@ foreach($tab->find('td') as $e){
 	 }
 
 }
-
-//MAJ en BDD OK
-
-$data['stations'] = $this->ModelStation->getStations();
-$this->load->view( 'vlive_stations', $data );
 
     }
 
