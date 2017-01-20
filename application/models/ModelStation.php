@@ -7,6 +7,12 @@ class ModelStation extends CI_Model {
 		$this -> table = "station";
 	}
 
+	function getLastUpdate(){
+
+		$sql = " select max( date_update ) from  ";
+
+	}
+
 	function getDistinctTowns() {
 
 		$sql = " SELECT town as name, town_id as townId, count(*) as count FROM station group by town, town_id order by town ";
@@ -15,6 +21,21 @@ class ModelStation extends CI_Model {
 		return $query;
 
 	}
+
+	function stationsHaveToBeUpdated(){
+
+		$sql = " select TIMESTAMPDIFF(MINUTE,max(date_update),CURRENT_TIMESTAMP) > 10 as toUpdate from station ";
+		$query = $this -> db -> query($sql);
+
+		$ret = false ;
+
+		if ( $query != null && $query-> num_rows() > 0 && $query[0]["toUpdate"] == 1 ){
+			$ret = true ;
+		}
+
+		return $ret ;
+	}
+
 
 	function getStationsByTown($townId) {
 
