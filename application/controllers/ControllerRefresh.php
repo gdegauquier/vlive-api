@@ -9,21 +9,11 @@ class ControllerRefresh extends CI_Controller {
         $this->load->model("ModelStation");
     }
 
-    public function index(  )
-    {
-		
-    	$hasToUpdate =  $this->ModelStation->stationsHaveToBeUpdated();
+    public function filter( $filter ){
 
-    	if ( $hasToUpdate ){
-    		$this->updateDB();
-    	}
+    	$data = $this->ModelStation->getStationsWithFilter( $filter );
 
-
-//MAJ en BDD OK
-
-$data = $this->ModelStation->getStations();
-
-			$stations = array();
+    	$stations = array();
 		
         if ($data->num_rows() > 0) {
             foreach ($data->result() as $row) {
@@ -41,6 +31,49 @@ $data = $this->ModelStation->getStations();
 				array_push($stations,$station);
                 
             }
+			header("Access-Control-Allow-Origin: *");
+            echo json_encode($stations, JSON_UNESCAPED_UNICODE);
+
+} else {
+            header("HTTP/1.0 204 No Content");
+            echo json_encode("204: no products in the database");
+        }
+
+    }
+
+    public function index(  )
+    {
+		
+    	$hasToUpdate =  $this->ModelStation->stationsHaveToBeUpdated();
+
+    	if ( $hasToUpdate ){
+    		$this->updateDB();
+    	}
+
+
+//MAJ en BDD OK
+
+$data = $this->ModelStation->getStations();
+
+		$stations = array();
+		
+        if ($data->num_rows() > 0) {
+            foreach ($data->result() as $row) {
+				
+				$station = new Station();
+				$station->id = $row->id;
+				$station->name = $row->name;
+				$station->address = $row->address;
+				$station->town_name = $row->town_name;
+				$station->town_id = $row->town_id;
+				$station->bikes = $row->bikes;
+				$station->attachs = $row->attachs;
+				$station->pay = $row->pay;
+				
+				array_push($stations,$station);
+                
+            }
+			header("Access-Control-Allow-Origin: *");
             echo json_encode($stations, JSON_UNESCAPED_UNICODE);
 
 } else {

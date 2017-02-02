@@ -58,6 +58,22 @@ class ModelStation extends CI_Model {
 
 	}
 
+	function getStationsWithFilter($filter){
+
+		$filter = strtolower( $filter );
+
+		$sql = " SELECT s.*, t.name as town_name
+				 FROM station s inner join town t on s.town_id =t.id 
+				 WHERE ( lower(s.name) like ? or lower( t.name ) like ? )
+				 order by s.name
+			   ";
+		$query = $this -> db -> query($sql, array('%'.$filter.'%', '%'.$filter.'%' ) );
+
+		return $query;
+
+	}
+
+
 
 	function getTownById($townId) {
 

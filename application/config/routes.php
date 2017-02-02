@@ -56,6 +56,7 @@ $route["api/v1/towns"] = "controllerTown";
 $route["api/v1/towns/(:any)/stations"] = "controllerStation/index/$1";
 
 $route["api/v1/refresh"] = "controllerRefresh";
+$route["api/v1/filter/(:any)"]  = "controllerRefresh/filter/$1";
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
