@@ -60,7 +60,7 @@ class ModelStation extends CI_Model {
 
 	function getStationsWithFilter($filter){
 
-		$filter = strtolower( $filter );
+		$filter = strtolower( urldecode($filter) );
 
 		$sql = " SELECT s.*, t.name as town_name
 				 FROM station s inner join town t on s.town_id =t.id 

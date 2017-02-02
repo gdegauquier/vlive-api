@@ -11,9 +11,10 @@ class ControllerRefresh extends CI_Controller {
 
     public function filter( $filter ){
 
+    	header("Access-Control-Allow-Origin: *");
     	$data = $this->ModelStation->getStationsWithFilter( $filter );
 
-    	$stations = array();
+    	$stations =  array();
 		
         if ($data->num_rows() > 0) {
             foreach ($data->result() as $row) {
@@ -31,19 +32,19 @@ class ControllerRefresh extends CI_Controller {
 				array_push($stations,$station);
                 
             }
-			header("Access-Control-Allow-Origin: *");
+			
             echo json_encode($stations, JSON_UNESCAPED_UNICODE);
 
 } else {
-            header("HTTP/1.0 204 No Content");
-            echo json_encode("204: no products in the database");
-        }
+
+            echo json_encode(array(), JSON_UNESCAPED_UNICODE);
+}
 
     }
 
     public function index(  )
     {
-		
+		header("Access-Control-Allow-Origin: *");
     	$hasToUpdate =  $this->ModelStation->stationsHaveToBeUpdated();
 
     	if ( $hasToUpdate ){
@@ -73,12 +74,13 @@ $data = $this->ModelStation->getStations();
 				array_push($stations,$station);
                 
             }
-			header("Access-Control-Allow-Origin: *");
+			
             echo json_encode($stations, JSON_UNESCAPED_UNICODE);
 
-} else {
-            header("HTTP/1.0 204 No Content");
-            echo json_encode("204: no products in the database");
+} 
+else {
+            //header("HTTP/1.0 204 No Content");
+            echo json_encode(array(), JSON_UNESCAPED_UNICODE);
         }
 
 
