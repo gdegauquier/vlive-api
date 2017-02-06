@@ -9,6 +9,7 @@ class ControllerRefresh extends CI_Controller {
         $this->load->model("ModelStation");
     }
 
+/*
     public function filter( $filter ){
 
     	header("Access-Control-Allow-Origin: *");
@@ -39,6 +40,67 @@ class ControllerRefresh extends CI_Controller {
 
             echo json_encode(array(), JSON_UNESCAPED_UNICODE);
 }
+
+    }
+*/
+
+    public function get( $number ){
+
+    	header("Access-Control-Allow-Origin: *");
+    	$html = new simple_html_dom();
+		$html->load_file('http://vlille.fr/stations/xml-station.aspx?borne='.$number);
+
+		$tab = $html->find('adress',0);
+		$address = $tab->plaintext;
+
+		$tab = $html->find('bikes',0);
+		$bikes = $tab->plaintext;
+
+		$tab = $html->find('attachs',0);
+		$attachs = $tab->plaintext;
+
+		$tab = $html->find('paiement',0);
+		$pay     = $tab->plaintext != "SANS_TPE";
+
+		$station = new Station();
+
+		$station->id = $number;
+		$station->address = $address ;
+		$station->bikes = $bikes;
+		$station->attachs = $attachs;
+		$station->pay = $pay;
+
+		$data = $this->ModelStation->getStationById( $number );
+		$stations = array();
+
+		if ($data->num_rows() > 0) {
+
+			$this->ModelStation->updateStationFromAPI( $station );
+			$data = $this->ModelStation->getStationById( $number );
+			
+			$row = $data->result()[0];
+
+				$station = new Station();
+				$station->id = $row->id;
+				$station->name = $row->name;
+				$station->address = $row->address;
+				$station->town_name = $row->town_name;
+				$station->town_id = $row->town_id;
+				$station->bikes = $row->bikes;
+				$station->attachs = $row->attachs;
+				$station->pay = $row->pay;
+				
+				array_push($stations,$station);
+
+		}
+
+		echo json_encode($stations, JSON_UNESCAPED_UNICODE);
+
+
+
+
+
+
 
     }
 
@@ -75,13 +137,13 @@ $data = $this->ModelStation->getStations();
                 
             }
 			
-            echo json_encode($stations, JSON_UNESCAPED_UNICODE);
+           
 
 } 
-else {
+
             //header("HTTP/1.0 204 No Content");
-            echo json_encode(array(), JSON_UNESCAPED_UNICODE);
-        }
+            echo json_encode($stations, JSON_UNESCAPED_UNICODE);
+        
 
 
 //$this->load->view( 'vlive_stations', $data );

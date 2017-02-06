@@ -6,12 +6,13 @@ class ModelStation extends CI_Model {
 		parent::__construct();
 		$this -> table = "station";
 	}
-
+/*
 	function getLastUpdate(){
 
-		$sql = " select max( date_update ) from  ";
+		$sql = " select max( date_update ) from station ";
 
 	}
+*/
 
 	function getDistinctTowns() {
 
@@ -58,6 +59,7 @@ class ModelStation extends CI_Model {
 
 	}
 
+/*
 	function getStationsWithFilter($filter){
 
 		$filter = strtolower( urldecode($filter) );
@@ -72,7 +74,7 @@ class ModelStation extends CI_Model {
 		return $query;
 
 	}
-
+*/
 
 
 	function getTownById($townId) {
@@ -133,7 +135,9 @@ class ModelStation extends CI_Model {
 
 	function getStationById( $id ){
 
-		$sql = " select * from station where id = ? ";
+		$sql = $sql = " SELECT s.*, t.name as town_name
+				 FROM station s inner join town t on s.town_id =t.id WHERE s.id =  ?
+				 order by s.name";
 		return $this->db->query($sql, array($id));
 
 	}
@@ -186,6 +190,17 @@ class ModelStation extends CI_Model {
 										  $stationDTO->bikes, 
 										  $stationDTO->attachs, 
 										  $stationDTO->pay ));
+
+	}
+
+	function updateStationFromAPI( $stationDTO ){
+
+		$sql = "update station set address = ?, bikes = ?, attachs = ?, pay = ? where id = ?";
+		$this->db->query($sql, array( $stationDTO->address, 
+									  $stationDTO->bikes, 
+									  $stationDTO->attachs, 
+									  $stationDTO->pay, 
+									  $stationDTO->id ));
 
 	}
 
