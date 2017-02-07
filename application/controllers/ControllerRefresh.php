@@ -48,6 +48,8 @@ class ControllerRefresh extends CI_Controller {
 
     	header("Access-Control-Allow-Origin: *");
     	$html = new simple_html_dom();
+		
+    	//STATION WITH PARTICULAR ID 
 		$html->load_file('http://vlille.fr/stations/xml-station.aspx?borne='.$number);
 
 		$tab = $html->find('adress',0);
@@ -62,6 +64,16 @@ class ControllerRefresh extends CI_Controller {
 		$tab = $html->find('paiement',0);
 		$pay     = $tab->plaintext != "SANS_TPE";
 
+
+		//STATIONS TO FIND COORDINATES LAT / LNG
+
+		$html->load_file('http://vlille.fr/stations/xml-stations.aspx');
+
+		$tab = $html->find('marker[id='.$number.']');
+		$lat = $tab[0]->lat;
+		$lng = $tab[0]->lng;
+		
+	
 		$station = new Station();
 
 		$station->id = $number;
@@ -69,7 +81,16 @@ class ControllerRefresh extends CI_Controller {
 		$station->bikes = $bikes;
 		$station->attachs = $attachs;
 		$station->pay = $pay;
+		$station->latitude = $lat;
+		$station->longitude = $lng;
 
+		$urlPicto = 'http://maps.googleapis.com/maps/api/streetview?size=640x480&location='.$lat.','.$lng.'&fov=120&heading=235&pitch=10&sensor=false';
+		//echo $urlPicto;
+		$content = file_get_contents($urlPicto);
+
+		$urlPicto = $_SERVER['DOCUMENT_ROOT'].'/vlive-api/assets/img/stations/'.$number.'.jpg';
+		file_put_contents($urlPicto, $content);
+		
 		$data = $this->ModelStation->getStationById( $number );
 		$stations = array();
 
@@ -89,6 +110,9 @@ class ControllerRefresh extends CI_Controller {
 				$station->bikes = $row->bikes;
 				$station->attachs = $row->attachs;
 				$station->pay = $row->pay;
+				$station->latitude = $row->latitude;
+				$station->longitude = $row->longitude;
+				$station->picture_url = 'assets/img/stations/'.$number.'.jpg';
 				
 				array_push($stations,$station);
 
@@ -132,6 +156,8 @@ $data = $this->ModelStation->getStations();
 				$station->bikes = $row->bikes;
 				$station->attachs = $row->attachs;
 				$station->pay = $row->pay;
+				$station->latitude = $row->latitude;
+				$station->longitude = $row->longitude;
 				
 				array_push($stations,$station);
                 

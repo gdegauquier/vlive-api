@@ -195,11 +195,16 @@ class ModelStation extends CI_Model {
 
 	function updateStationFromAPI( $stationDTO ){
 
-		$sql = "update station set address = ?, bikes = ?, attachs = ?, pay = ? where id = ?";
+//$this->output->enable_profiler(TRUE);
+
+		$sql = "update station set address = ?, bikes = ?, attachs = ?, pay = ?, latitude = ?, longitude = ?, picture_url = ? where id = ?";
 		$this->db->query($sql, array( $stationDTO->address, 
 									  $stationDTO->bikes, 
 									  $stationDTO->attachs, 
 									  $stationDTO->pay, 
+									  $stationDTO->latitude,
+									  $stationDTO->longitude, 
+									  $stationDTO->picture_url, 
 									  $stationDTO->id ));
 
 	}

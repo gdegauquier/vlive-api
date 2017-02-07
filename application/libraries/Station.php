@@ -11,5 +11,8 @@ class Station
 	public $bikes;
 	public $attachs;
 	public $pay;
+	public $latitude;
+	public $longitude;
+	public $picture_url;
 	
 }
