@@ -40,7 +40,7 @@ class ModelStation extends CI_Model {
 	function getStationsByTown($townId) {
 
 		$sql = " SELECT id as id, name as name, address as address, town as townName , town_id as townId
-				 FROM station 
+				 FROM station
 				 where town_id = ? order by name";
 		$query = $this -> db -> query($sql, array($townId));
 
@@ -65,7 +65,7 @@ class ModelStation extends CI_Model {
 		$filter = strtolower( urldecode($filter) );
 
 		$sql = " SELECT s.*, t.name as town_name
-				 FROM station s inner join town t on s.town_id =t.id 
+				 FROM station s inner join town t on s.town_id =t.id
 				 WHERE ( lower(s.name) like ? or lower( t.name ) like ? )
 				 order by s.name
 			   ";
@@ -80,25 +80,25 @@ class ModelStation extends CI_Model {
 	function getTownById($townId) {
 
 		$sql = " SELECT town as name , town_id as id
-				 FROM station 
+				 FROM station
 				 where town_id = ? LIMIT 1 ";
 		$query = $this -> db -> query($sql, array($townId));
 
 		return $query;
 
 	}
-	
-	
+
+
 	function getTownByName($townName) {
 		$sql = " SELECT name as name , id as id
-				 FROM  town 
+				 FROM  town
 				 where name = ? LIMIT 1 ";
 		$query = $this -> db -> query($sql, array($townName));
 
 		return $query;
 	}
-	
-	
+
+
 	/**
 	* insert town into DB
 	* @name name of the town
@@ -108,7 +108,7 @@ class ModelStation extends CI_Model {
 		//id exists ?
 		$id = null;
 		$query = $this->getTownByName( $name );
-		
+
 		//returns existing id
 		if ( $query != null && $query->num_rows() > 0){
 			$id = $query->result()[0]->id ;
@@ -117,18 +117,18 @@ class ModelStation extends CI_Model {
 
 			echo 'ville non trouvée';
 		}
-		
+
 		//not exists ? insert town into db ...
 		$sql = "insert into town ( name ) values ( ? )";
 		$this->db->query($sql, array($name));
-		
-		//... and get created id 
+
+		//... and get created id
 		$query = $this->getTownByName( $name );
 		if ( $query != null && $query->num_rows() > 0){
 			$id = $query->result()[0]->id ;
-			
+
 		}
-		
+
 		return $id;
 
 	}
@@ -143,7 +143,7 @@ class ModelStation extends CI_Model {
 	}
 
 
-	/** 
+	/**
 	* insert station into DB
 	* @stationDTO
 	*/
@@ -165,12 +165,12 @@ class ModelStation extends CI_Model {
 		if ( $query != null && $query->num_rows() > 0){
 
 			$sql = "update station set name = ?, address = ?, town_id = ?, bikes = ?, attachs = ?, pay = ? where id = ?";
-			$this->db->query($sql, array( $stationDTO->name,  
-										  $stationDTO->address, 
-										  $idTown, 
-										  $stationDTO->bikes, 
-										  $stationDTO->attachs, 
-										  $stationDTO->pay, 
+			$this->db->query($sql, array( $stationDTO->name,
+										  $stationDTO->address,
+										  $idTown,
+										  $stationDTO->bikes,
+										  $stationDTO->attachs,
+										  $stationDTO->pay,
 										  $stationDTO->id ));
 
 
@@ -181,14 +181,14 @@ class ModelStation extends CI_Model {
 
 		//insert infos
 
-		$sql = "insert into station (  id, name, address, town_id, bikes, attachs, pay  ) 
+		$sql = "insert into station (  id, name, address, town_id, bikes, attachs, pay  )
 				values ( ?,?,?,?,?,?,? ) ";
-			$this->db->query($sql, array( $stationDTO->id,  
-										  $stationDTO->name, 
-										  $stationDTO->address, 
+			$this->db->query($sql, array( $stationDTO->id,
+										  $stationDTO->name,
+										  $stationDTO->address,
 										  $idTown,
-										  $stationDTO->bikes, 
-										  $stationDTO->attachs, 
+										  $stationDTO->bikes,
+										  $stationDTO->attachs,
 										  $stationDTO->pay ));
 
 	}
@@ -198,12 +198,12 @@ class ModelStation extends CI_Model {
 //$this->output->enable_profiler(TRUE);
 
 		$sql = "update station set address = ?, bikes = ?, attachs = ?, pay = ?, latitude = ?, longitude = ? where id = ?";
-		$this->db->query($sql, array( $stationDTO->address, 
-									  $stationDTO->bikes, 
-									  $stationDTO->attachs, 
-									  $stationDTO->pay, 
+		$this->db->query($sql, array( $stationDTO->address,
+									  $stationDTO->bikes,
+									  $stationDTO->attachs,
+									  $stationDTO->pay,
 									  $stationDTO->latitude,
-									  $stationDTO->longitude, 
+									  $stationDTO->longitude,
 									  $stationDTO->id ));
 
 	}
